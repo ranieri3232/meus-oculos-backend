@@ -2,6 +2,7 @@ package dev.rlucassmd.meusOculosApi.dtos;
 
 import dev.rlucassmd.meusOculosApi.entities.Address;
 import dev.rlucassmd.meusOculosApi.entities.Ubs;
+import dev.rlucassmd.meusOculosApi.entities.User;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ public class UbsDTO implements Serializable {
     private String name;
     private Integer esf;
     private Address address;
+    private User manager;
 
     public UbsDTO(Long id, String name, Integer esf) {
         this.id = id;
@@ -21,9 +23,22 @@ public class UbsDTO implements Serializable {
         this.esf = esf;
     }
 
+    public UbsDTO(){
+
+    }
+
+    public User getManager() {
+        return manager;
+    }
+
+    public void setManager(User manager) {
+        this.manager = manager;
+    }
+
     public UbsDTO(Ubs entity){
         this(entity.getId(), entity.getName(), entity.getEsf());
         setAddress(entity.getAddress());
+        setManager(entity.getManager());
     }
 
     public Long getId() {
