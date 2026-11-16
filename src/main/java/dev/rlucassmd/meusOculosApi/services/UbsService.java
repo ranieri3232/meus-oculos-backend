@@ -2,8 +2,10 @@ package dev.rlucassmd.meusOculosApi.services;
 
 import dev.rlucassmd.meusOculosApi.dtos.UbsDTO;
 import dev.rlucassmd.meusOculosApi.entities.Ubs;
+import dev.rlucassmd.meusOculosApi.entities.User;
 import dev.rlucassmd.meusOculosApi.repositories.AddressRepository;
 import dev.rlucassmd.meusOculosApi.repositories.UbsRepository;
+import dev.rlucassmd.meusOculosApi.repositories.UserRepository;
 import dev.rlucassmd.meusOculosApi.services.exceptions.DatabaseException;
 import dev.rlucassmd.meusOculosApi.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,17 +28,20 @@ public class UbsService {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Transactional(readOnly = true)
     public Page<UbsDTO>findAllPaged(Pageable pageable){
-        Page<Ubs> list = ubsRepository.findAll(pageable);
+        Page<Ubs> page = ubsRepository.findAll(pageable);
 
-        return list.map(UbsDTO::new);
+        return page.map(UbsDTO::new);
     }
     @Transactional(readOnly = true)
     public List<UbsDTO>findAll(){
         List<Ubs> list = ubsRepository.findAll();
 
-        return list.stream().map(UbsDTO::new).collect(Collectors.toList());
+        return list.stream().map(UbsDTO::new).toList();
     }
 
     @Transactional(readOnly = true)
@@ -61,7 +66,6 @@ public class UbsService {
             copyDtoToEntity(ubsDTO, entity);
             entity = ubsRepository.saveAndFlush(entity);
             return new UbsDTO(entity);
-
         }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException("Resource not found with id: " + id);
         }
@@ -81,9 +85,10 @@ public class UbsService {
     }
 
     public void copyDtoToEntity(UbsDTO ubsDTO, Ubs entity){
+        User manager = userRepository.getReferenceById(ubsDTO.getManagedBy().getId());
         entity.setName(ubsDTO.getName());
         entity.setEsf(ubsDTO.getEsf());
-        entity.setManager(ubsDTO.getManager());
+        entity.setManagedBy(manager);
         entity.setAddress(ubsDTO.getAddress());
     }
 }
