@@ -15,7 +15,7 @@ public class UbsDTO implements Serializable {
     private String name;
     private Integer esf;
     private Address address;
-    private User manager;
+    private ManagerDTO managedBy;
 
     public UbsDTO(Long id, String name, Integer esf) {
         this.id = id;
@@ -27,18 +27,20 @@ public class UbsDTO implements Serializable {
 
     }
 
-    public User getManager() {
-        return manager;
+    public ManagerDTO getManagedBy() {
+        return managedBy;
     }
 
-    public void setManager(User manager) {
-        this.manager = manager;
+    public void setManagedBy(ManagerDTO managedBy) {
+        this.managedBy = managedBy;
     }
 
     public UbsDTO(Ubs entity){
         this(entity.getId(), entity.getName(), entity.getEsf());
         setAddress(entity.getAddress());
-        setManager(entity.getManager());
+        if(entity.getManagedBy() != null) {
+            setManagedBy(new ManagerDTO(entity.getManagedBy()));
+        }
     }
 
     public Long getId() {
