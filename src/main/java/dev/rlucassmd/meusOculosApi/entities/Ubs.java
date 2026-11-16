@@ -22,7 +22,7 @@ public class Ubs implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
-    private User manager;
+    private User managedBy;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
@@ -39,11 +39,20 @@ public class Ubs implements Serializable {
     public Ubs() {
     }
 
-    public Ubs(Long id, String name, int esf, User manager) {
+    public Ubs(Long id, String name, int esf, User managedBy, Address address) {
         this.id = id;
         this.name = name;
         this.esf = esf;
-        this.manager = manager;
+        this.managedBy = managedBy;
+        this.address = address;
+    }
+
+    public User getManagedBy() {
+        return managedBy;
+    }
+
+    public void setManagedBy(User managedBy) {
+        this.managedBy = managedBy;
     }
 
     public Long getId() {
@@ -70,13 +79,7 @@ public class Ubs implements Serializable {
         this.esf = esf;
     }
 
-    public User getManager() {
-        return manager;
-    }
 
-    public void setManager(User manager) {
-        this.manager = manager;
-    }
 
     @Override
     public boolean equals(Object o) {
