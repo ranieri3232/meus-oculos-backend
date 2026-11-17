@@ -11,8 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-    Optional<Patient> findByCpf(String cpf);
-    Optional<Patient> findByCns(String cns);
+    Page<Patient> findByCpf(String cpf, Pageable pageable);
+    Page<Patient> findByCns(String cns, Pageable pageable);
 
     Page<Patient> findByNameContainingIgnoreCase(String name, Pageable pageable);
 

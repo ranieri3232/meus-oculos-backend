@@ -17,6 +17,7 @@ import java.net.URI;
 public class PatientController {
     @Autowired
     private PatientService patientService;
+
     @GetMapping
     ResponseEntity<Page<PatientDTO>> getAllPatientsPaged(Pageable pageable){
         Page<PatientDTO> page = patientService.findAllPatientsPaged(pageable);
@@ -26,27 +27,34 @@ public class PatientController {
 
     @GetMapping(value = "/{id}")
     ResponseEntity<PatientDTO> getPatientById(@PathVariable Long id){
-        PatientDTO ubs = patientService.findById(id);
-        return ResponseEntity.ok().body(ubs);
+        PatientDTO entity = patientService.findById(id);
+        return ResponseEntity.ok().body(entity);
+    }
+    @GetMapping(value = "/search")
+    ResponseEntity<Page<PatientDTO>> getPatientByCpf(@RequestParam String searchTerm, Pageable pageable){
+        Page<PatientDTO> entity = patientService.findBySearchTerm(searchTerm, pageable);
+        return ResponseEntity.ok().body(entity);
     }
 
-//    @PostMapping
-//    ResponseEntity<UbsDTO> insertNewUbs(@RequestBody UbsDTO ubsDTO){
-//        ubsDTO = patientService.insert(ubsDTO);
-//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(ubsDTO.getId()).toUri();
-//        return ResponseEntity.created(uri).body(ubsDTO);
-//    }
-//
-//    @PutMapping(value = "/{id}")
-//    ResponseEntity<UbsDTO> updateUbs(@PathVariable Long id, @RequestBody UbsDTO ubsDTO){
-//        ubsDTO = patientService.update(id, ubsDTO);
-//        return ResponseEntity.ok().body(ubsDTO);
-//    }
-//
-//    @DeleteMapping(value = "/{id}")
-//    public ResponseEntity<Void> delete(@PathVariable Long id){
-//        patientService.delete(id);
-//
-//        return ResponseEntity.noContent().build();
-//    }
+    @PostMapping
+    ResponseEntity<PatientDTO> insertNewPatient(@RequestBody PatientDTO dto){
+        dto = patientService.insert(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
+    }
+
+    @PutMapping(value = "/{id}")
+    ResponseEntity<PatientDTO> updatePatient(@PathVariable Long id, @RequestBody PatientDTO dto){
+        dto = patientService.update(id, dto);
+        return ResponseEntity.ok().body(dto);
+    }
+
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        patientService.delete(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
