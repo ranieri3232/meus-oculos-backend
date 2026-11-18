@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -41,6 +43,11 @@ public class Patient implements Serializable {
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant updatedAt;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EyeExam> eyeExams = new ArrayList<>();
+
+
 
     public Patient() {
     }
@@ -145,6 +152,10 @@ public class Patient implements Serializable {
     @PrePersist
     public void prePersist() {
         createdAt = Instant.now();
+    }
+
+    public List<EyeExam> getEyeExams() {
+        return eyeExams;
     }
 
     @Override
