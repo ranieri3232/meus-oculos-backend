@@ -5,7 +5,9 @@ import dev.rlucassmd.meusOculosApi.entities.Patient;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PatientDTO implements Serializable {
     @Serial
@@ -22,6 +24,8 @@ public class PatientDTO implements Serializable {
     private Integer monthlyIncome;
     private Instant createdAt;
     private Instant updatedAt;
+
+    private List<EyeExamDTO> eyeExams = new ArrayList<>();
 
     public PatientDTO() {
     }
@@ -52,6 +56,11 @@ public class PatientDTO implements Serializable {
         this.monthlyIncome = entity.getMonthlyIncome();
         this.createdAt = entity.getCreatedAt();
         this.updatedAt = entity.getUpdatedAt();
+        entity.getEyeExams().forEach(eyeExam -> this.eyeExams.add(new EyeExamDTO(eyeExam)));
+    }
+
+    public List<EyeExamDTO> getEyeExams() {
+        return eyeExams;
     }
 
     public Long getId() {
