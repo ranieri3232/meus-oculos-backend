@@ -39,7 +39,7 @@ public class PatientService {
     public PatientDTO findById(Long id){
         Optional<Patient> optional = patientRepository.findById(id);
         Patient entity = optional.orElseThrow(() -> new ResourceNotFoundException("Patient not found!"));
-        return new PatientDTO(entity);
+        return new PatientDTO(entity, entity.getEyeExams());
     }
 
     @Transactional(readOnly = true)
@@ -54,38 +54,24 @@ public class PatientService {
 
         if (onlyNumbers.length() == 11 && originalTerm.matches("[0-9.-]+")) {
             Page<Patient> page = patientRepository.findByCpf(onlyNumbers, pageable);
-            return page.map(PatientDTO::new);
+            return page.map(item -> new PatientDTO(item, item.getEyeExams()));
             //return patientRepository.findByCpf(onlyNumbers, pageable);
         }
 
         if (onlyNumbers.length() == 15 && originalTerm.matches("[0-9\\s]+")) {
             Page<Patient> page = patientRepository.findByCns(onlyNumbers, pageable);
-            return page.map(PatientDTO::new);
+            return page.map(item -> new PatientDTO(item, item.getEyeExams()));
         }
 
         Page<Patient> page = patientRepository.findByNameContainingIgnoreCase(originalTerm, pageable);
-        return page.map(PatientDTO::new);
+        return page.map(item -> new PatientDTO(item, item.getEyeExams()));
     }
-
-//    @Transactional(readOnly = true)
-//    public PatientDTO findByCpf(String cpf){
-//        Optional<Patient> optional = patientRepository.findByCpf(cpf);
-//        Patient entity = optional.orElseThrow(() -> new ResourceNotFoundException("Patient not found!"));
-//        return new PatientDTO(entity);
-//    }
-//
-//    @Transactional(readOnly = true)
-//    public PatientDTO findByCns(String cns){
-//        Optional<Patient> optional = patientRepository.findByCns(cns);
-//        Patient entity = optional.orElseThrow(() -> new ResourceNotFoundException("Patient not found!"));
-//        return new PatientDTO(entity);
-//    }
 
     @Transactional(readOnly = true)
     public Page<PatientDTO> searchByNamePaged(String name, Pageable pageable){
         Page<Patient> page = patientRepository.findByNameContainingIgnoreCase(name, pageable);
 
-        return page.map(PatientDTO::new);
+        return page.map(item -> new PatientDTO(item, item.getEyeExams()));
     }
 
     @Transactional
@@ -104,7 +90,7 @@ public class PatientService {
             copyDtoToEntity(dto, entity);
             entity = patientRepository.saveAndFlush(entity);
 
-            return new PatientDTO(entity);
+            return new PatientDTO(entity, entity.getEyeExams());
         }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException("Patient not found!");
         }

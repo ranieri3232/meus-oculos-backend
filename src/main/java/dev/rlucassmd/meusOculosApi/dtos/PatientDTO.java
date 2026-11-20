@@ -1,5 +1,6 @@
 package dev.rlucassmd.meusOculosApi.dtos;
 
+import dev.rlucassmd.meusOculosApi.entities.EyeExam;
 import dev.rlucassmd.meusOculosApi.entities.Patient;
 
 import java.io.Serial;
@@ -25,7 +26,7 @@ public class PatientDTO implements Serializable {
     private Instant createdAt;
     private Instant updatedAt;
 
-    private List<EyeExamDTO> eyeExams = new ArrayList<>();
+    private List<PatientEyeExamDTO> eyeExams = new ArrayList<>();
 
     public PatientDTO() {
     }
@@ -56,10 +57,14 @@ public class PatientDTO implements Serializable {
         this.monthlyIncome = entity.getMonthlyIncome();
         this.createdAt = entity.getCreatedAt();
         this.updatedAt = entity.getUpdatedAt();
-        entity.getEyeExams().forEach(eyeExam -> this.eyeExams.add(new EyeExamDTO(eyeExam)));
     }
 
-    public List<EyeExamDTO> getEyeExams() {
+    public PatientDTO(Patient entity, List<EyeExam> exams){
+        this(entity);
+        exams.forEach(exam -> this.eyeExams.add(new PatientEyeExamDTO(exam)));
+    }
+
+    public List<PatientEyeExamDTO> getEyeExams() {
         return eyeExams;
     }
 

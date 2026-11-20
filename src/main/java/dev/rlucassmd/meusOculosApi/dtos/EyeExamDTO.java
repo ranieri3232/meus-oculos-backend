@@ -30,9 +30,9 @@ public class EyeExamDTO implements Serializable {
     private Instant createdAt;
     private boolean isChosen;
 
-    private Patient patient;
+    private PatientDTO patient;
 
-    public EyeExamDTO(Long id, Date examDate, String lensColor, String lensType, BigDecimal sphereRight, BigDecimal cylindricalRight, Integer axisRight, BigDecimal sphereLeft, BigDecimal cylindricalLeft, Integer axisLeft, BigDecimal additional, String observations, Instant createdAt, boolean isChosen, Patient patient) {
+    public EyeExamDTO(Long id, Date examDate, String lensColor, String lensType, BigDecimal sphereRight, BigDecimal cylindricalRight, Integer axisRight, BigDecimal sphereLeft, BigDecimal cylindricalLeft, Integer axisLeft, BigDecimal additional, String observations, Instant createdAt, boolean isChosen, PatientDTO patient) {
         this.id = id;
         this.examDate = examDate;
         this.lensColor = lensColor;
@@ -65,7 +65,7 @@ public class EyeExamDTO implements Serializable {
         this.observations = entity.getObservations();
         this.createdAt = entity.getCreatedAt();
         this.isChosen = entity.isChosen();
-        this.patient = entity.getPatient();
+        this.patient = new PatientDTO(entity.getPatient());
     }
 
     public EyeExamDTO() {
@@ -183,11 +183,11 @@ public class EyeExamDTO implements Serializable {
         isChosen = chosen;
     }
 
-    public Patient getPatient() {
+    public PatientDTO getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
+    public void setPatient(PatientDTO patient) {
         this.patient = patient;
     }
 }
