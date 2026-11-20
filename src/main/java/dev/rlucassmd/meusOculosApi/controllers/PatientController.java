@@ -31,8 +31,8 @@ public class PatientController {
         return ResponseEntity.ok().body(entity);
     }
     @GetMapping(value = "/search")
-    ResponseEntity<Page<PatientDTO>> getPatientByCpf(@RequestParam String searchTerm, Pageable pageable){
-        Page<PatientDTO> entity = patientService.findBySearchTerm(searchTerm, pageable);
+    ResponseEntity<Page<PatientDTO>> getPatientByCpf(@RequestParam String q, Pageable pageable){
+        Page<PatientDTO> entity = patientService.findBySearchTerm(q, pageable);
         return ResponseEntity.ok().body(entity);
     }
 
