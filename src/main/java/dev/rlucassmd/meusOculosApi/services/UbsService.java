@@ -1,6 +1,7 @@
 package dev.rlucassmd.meusOculosApi.services;
 
 import dev.rlucassmd.meusOculosApi.dtos.UbsDTO;
+import dev.rlucassmd.meusOculosApi.entities.Address;
 import dev.rlucassmd.meusOculosApi.entities.Ubs;
 import dev.rlucassmd.meusOculosApi.entities.User;
 import dev.rlucassmd.meusOculosApi.repositories.AddressRepository;
@@ -84,11 +85,19 @@ public class UbsService {
         }
     }
 
-    public void copyDtoToEntity(UbsDTO ubsDTO, Ubs entity){
-        User manager = userRepository.getReferenceById(ubsDTO.getManagedBy().getId());
-        entity.setName(ubsDTO.getName());
-        entity.setEsf(ubsDTO.getEsf());
+    public void copyDtoToEntity(UbsDTO dto, Ubs entity){
+        User manager = userRepository.getReferenceById(dto.getManagedBy().getId());
+        entity.setName(dto.getName());
+        entity.setEsf(dto.getEsf());
         entity.setManagedBy(manager);
-        entity.setAddress(ubsDTO.getAddress());
+        Address address = new Address();
+        if(dto.getAddress() != null){
+            address = addressRepository.getReferenceById(dto.getAddress().getId());
+            entity.setAddress(address);
+        } else {
+            address.setDistrict(dto.getAddress().getDistrict());
+            address.setNumber(dto.getAddress().getNumber());
+            address.setStreet(dto.getAddress().getStreet());
+        }
     }
 }
