@@ -57,13 +57,10 @@ public class EventService {
         }catch (Exception e){
             throw new ResourceNotFoundException("Event not found");
         }
-
     }
 
     private void copyDtoToEntity(EventDTO dto, Event entity) {
-//        Address address = addressRepository.getReferenceById(dto.getAddress().getId());
 
-//        entity.setId(dto.getId());
         entity.setDescription(dto.getDescription());
         entity.setEventDate(dto.getEventDate());
         entity.setEventTime(dto.getEventTime());
