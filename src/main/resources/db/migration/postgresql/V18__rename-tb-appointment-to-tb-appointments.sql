@@ -1,0 +1,1 @@
+ALTER TABLE tb_appointment RENAME TO tb_appointments;
