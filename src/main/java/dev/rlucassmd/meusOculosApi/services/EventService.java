@@ -1,10 +1,8 @@
 package dev.rlucassmd.meusOculosApi.services;
 
-import dev.rlucassmd.meusOculosApi.dtos.EventDTO;
-import dev.rlucassmd.meusOculosApi.dtos.EyeExamDTO;
+import dev.rlucassmd.meusOculosApi.dto.EventDTO;
 import dev.rlucassmd.meusOculosApi.entities.Address;
 import dev.rlucassmd.meusOculosApi.entities.Event;
-import dev.rlucassmd.meusOculosApi.entities.EyeExam;
 import dev.rlucassmd.meusOculosApi.repositories.AddressRepository;
 import dev.rlucassmd.meusOculosApi.repositories.EventRepository;
 import dev.rlucassmd.meusOculosApi.services.exceptions.ResourceNotFoundException;

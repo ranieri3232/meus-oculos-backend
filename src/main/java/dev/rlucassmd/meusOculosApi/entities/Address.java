@@ -1,6 +1,5 @@
 package dev.rlucassmd.meusOculosApi.entities;
 
-import dev.rlucassmd.meusOculosApi.dtos.AddressDTO;
 import jakarta.persistence.*;
 
 import java.io.Serial;

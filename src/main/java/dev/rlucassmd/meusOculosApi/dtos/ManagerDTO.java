@@ -2,53 +2,12 @@ package dev.rlucassmd.meusOculosApi.dtos;
 
 import dev.rlucassmd.meusOculosApi.entities.User;
 
-import java.io.Serial;
-import java.io.Serializable;
-
-public class ManagerDTO implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
-    private Long id;
-    private String email;
-    private String name;
-
-    public ManagerDTO() {
-    }
-
-    public ManagerDTO(User entity){
-        this.id = entity.getId();
-        this.email = entity.getEmail();
-        this.name = entity.getName();
-    }
-
-    public ManagerDTO(Long id, String email, String name) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+public record ManagerDTO (Long id, String name){
+    public static ManagerDTO fromEntity(User user){
+        if(user == null){ return null; }
+        return new ManagerDTO(
+                user.getId(),
+                user.getName()
+        );
     }
 }

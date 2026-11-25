@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/ubs")
@@ -35,7 +34,7 @@ public class UbsController {
     @PostMapping
     ResponseEntity<UbsDTO> insertNewUbs(@RequestBody UbsDTO ubsDTO){
         ubsDTO = ubsService.insert(ubsDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(ubsDTO.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(ubsDTO.id()).toUri();
         return ResponseEntity.created(uri).body(ubsDTO);
     }
 
@@ -49,6 +48,12 @@ public class UbsController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         ubsService.delete(id);
 
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(value = "/{id}/address")
+    public ResponseEntity<Void> deleteUbsAddress(@PathVariable Long id){
+        ubsService.deleteUbsAddress(id);
         return ResponseEntity.noContent().build();
     }
 

@@ -1,6 +1,6 @@
 package dev.rlucassmd.meusOculosApi.controllers;
 
-import dev.rlucassmd.meusOculosApi.dtos.EyeExamDTO;
+import dev.rlucassmd.meusOculosApi.dto.EyeExamDTO;
 import dev.rlucassmd.meusOculosApi.services.EyeExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

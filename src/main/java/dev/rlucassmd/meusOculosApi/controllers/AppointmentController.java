@@ -1,12 +1,9 @@
 package dev.rlucassmd.meusOculosApi.controllers;
 
-import dev.rlucassmd.meusOculosApi.dtos.AppointmentDTO;
-import dev.rlucassmd.meusOculosApi.dtos.AppointmentInsertDTO;
-import dev.rlucassmd.meusOculosApi.dtos.EventDTO;
+import dev.rlucassmd.meusOculosApi.dto.AppointmentDTO;
+import dev.rlucassmd.meusOculosApi.dto.AppointmentInsertDTO;
 import dev.rlucassmd.meusOculosApi.services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

@@ -1,6 +1,6 @@
 package dev.rlucassmd.meusOculosApi.services;
 
-import dev.rlucassmd.meusOculosApi.dtos.PatientDTO;
+import dev.rlucassmd.meusOculosApi.dto.PatientDTO;
 import dev.rlucassmd.meusOculosApi.entities.Patient;
 import dev.rlucassmd.meusOculosApi.repositories.PatientRepository;
 import dev.rlucassmd.meusOculosApi.services.exceptions.DatabaseException;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

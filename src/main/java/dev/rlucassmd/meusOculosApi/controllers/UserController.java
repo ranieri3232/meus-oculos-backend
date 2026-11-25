@@ -1,6 +1,5 @@
 package dev.rlucassmd.meusOculosApi.controllers;
 
-import dev.rlucassmd.meusOculosApi.dtos.UbsDTO;
 import dev.rlucassmd.meusOculosApi.dtos.UserDTO;
 import dev.rlucassmd.meusOculosApi.dtos.UserInsertDTO;
 import dev.rlucassmd.meusOculosApi.services.UserService;
@@ -39,7 +38,7 @@ public class UserController {
         UserDTO newUserDto = userService.insert(dto);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(newUserDto  .getId())
+                .buildAndExpand(newUserDto.id())
                 .toUri();
         return ResponseEntity.created(uri).body(newUserDto);
     }

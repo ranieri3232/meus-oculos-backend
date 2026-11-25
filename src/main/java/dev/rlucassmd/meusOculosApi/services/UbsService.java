@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UbsService {
@@ -36,20 +35,20 @@ public class UbsService {
     public Page<UbsDTO>findAllPaged(Pageable pageable){
         Page<Ubs> page = ubsRepository.findAll(pageable);
 
-        return page.map(UbsDTO::new);
+        return page.map(UbsDTO::fromEntity);
     }
     @Transactional(readOnly = true)
     public List<UbsDTO>findAll(){
         List<Ubs> list = ubsRepository.findAll();
 
-        return list.stream().map(UbsDTO::new).toList();
+        return list.stream().map(UbsDTO::fromEntity).toList();
     }
 
     @Transactional(readOnly = true)
     public UbsDTO findById(Long id){
         Optional<Ubs> optional = ubsRepository.findById(id);
         Ubs ubs = optional.orElseThrow(() -> new ResourceNotFoundException("UBS not found!"));
-        return new UbsDTO(ubs);
+        return UbsDTO.fromEntity(ubs);
     }
 
     @Transactional
@@ -57,7 +56,7 @@ public class UbsService {
         Ubs entity = new Ubs();
         copyDtoToEntity(ubsDTO, entity);
         entity = ubsRepository.save(entity);
-        return new UbsDTO(entity);
+        return UbsDTO.fromEntity(entity);
     }
 
     @Transactional
@@ -66,7 +65,7 @@ public class UbsService {
             Ubs entity = ubsRepository.getReferenceById(id);
             copyDtoToEntity(ubsDTO, entity);
             entity = ubsRepository.saveAndFlush(entity);
-            return new UbsDTO(entity);
+            return UbsDTO.fromEntity(entity);
         }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException("Resource not found with id: " + id);
         }
@@ -85,19 +84,26 @@ public class UbsService {
         }
     }
 
+    public void deleteUbsAddress(Long id){
+        Ubs ubs = ubsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ubs not found!"));
+        ubs.setAddress(null);
+        ubsRepository.save(ubs);
+    }
+
     public void copyDtoToEntity(UbsDTO dto, Ubs entity){
-        User manager = userRepository.getReferenceById(dto.getManagedBy().getId());
-        entity.setName(dto.getName());
-        entity.setEsf(dto.getEsf());
-        entity.setManagedBy(manager);
-        Address address = new Address();
-        if(dto.getAddress() != null){
-            address = addressRepository.getReferenceById(dto.getAddress().getId());
+
+        entity.setName(dto.name());
+        entity.setEsf(dto.esf());
+        if(dto.manager() != null) {
+            User manager = userRepository.getReferenceById(dto.manager().id());
+            entity.setManagedBy(manager);
+        }
+        if(dto.address() != null) {
+            Address address = new Address();
+            address.setDistrict(dto.address().district());
+            address.setNumber(dto.address().number());
+            address.setStreet(dto.address().street());
             entity.setAddress(address);
-        } else {
-            address.setDistrict(dto.getAddress().getDistrict());
-            address.setNumber(dto.getAddress().getNumber());
-            address.setStreet(dto.getAddress().getStreet());
         }
     }
 }

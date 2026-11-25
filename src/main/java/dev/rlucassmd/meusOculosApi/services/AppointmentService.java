@@ -1,8 +1,7 @@
 package dev.rlucassmd.meusOculosApi.services;
 
-import dev.rlucassmd.meusOculosApi.dtos.AppointmentDTO;
-import dev.rlucassmd.meusOculosApi.dtos.AppointmentInsertDTO;
-import dev.rlucassmd.meusOculosApi.dtos.UbsDTO;
+import dev.rlucassmd.meusOculosApi.dto.AppointmentDTO;
+import dev.rlucassmd.meusOculosApi.dto.AppointmentInsertDTO;
 import dev.rlucassmd.meusOculosApi.entities.*;
 import dev.rlucassmd.meusOculosApi.repositories.AppointmentRepository;
 import dev.rlucassmd.meusOculosApi.repositories.EventRepository;
@@ -10,12 +9,9 @@ import dev.rlucassmd.meusOculosApi.repositories.EyeExamRepository;
 import dev.rlucassmd.meusOculosApi.repositories.PatientRepository;
 import dev.rlucassmd.meusOculosApi.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 

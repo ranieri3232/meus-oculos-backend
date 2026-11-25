@@ -1,15 +1,13 @@
 package dev.rlucassmd.meusOculosApi.services;
 
-import dev.rlucassmd.meusOculosApi.dtos.RoleDTO;
-import dev.rlucassmd.meusOculosApi.dtos.UbsDTO;
+import dev.rlucassmd.meusOculosApi.dtos.AddressDTO;
 import dev.rlucassmd.meusOculosApi.dtos.UserDTO;
 import dev.rlucassmd.meusOculosApi.dtos.UserInsertDTO;
+import dev.rlucassmd.meusOculosApi.entities.Address;
 import dev.rlucassmd.meusOculosApi.entities.Role;
-import dev.rlucassmd.meusOculosApi.entities.Ubs;
 import dev.rlucassmd.meusOculosApi.entities.User;
 import dev.rlucassmd.meusOculosApi.repositories.AddressRepository;
 import dev.rlucassmd.meusOculosApi.repositories.RoleRepository;
-import dev.rlucassmd.meusOculosApi.repositories.UbsRepository;
 import dev.rlucassmd.meusOculosApi.repositories.UserRepository;
 import dev.rlucassmd.meusOculosApi.services.exceptions.DatabaseException;
 import dev.rlucassmd.meusOculosApi.services.exceptions.ResourceNotFoundException;
@@ -44,40 +42,41 @@ public class UserService {
     public Page<UserDTO>findAllPaged(Pageable pageable){
         Page<User> list = userRepository.findAll(pageable);
 
-        return list.map(UserDTO::new);
+        return list.map(UserDTO::fromEntity);
     }
     @Transactional(readOnly = true)
     public List<UserDTO>findAll(){
         List<User> list = userRepository.findAll();
 
-        return list.stream().map(UserDTO::new).collect(Collectors.toList());
+        return list.stream().map(UserDTO::fromEntity).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public UserDTO findById(Long id){
         Optional<User> optional = userRepository.findById(id);
         User user = optional.orElseThrow(() -> new ResourceNotFoundException("User not found!"));
-        return new UserDTO(user);
+        return UserDTO.fromEntity(user);
     }
 
     @Transactional
     public UserDTO insert(UserInsertDTO userDTO){
         User entity = new User();
-        copyDtoToEntity(userDTO, entity);
-        entity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        copyInsertDtoToEntity(userDTO, entity);
+//        entity = UserDTO.fromEntity()
+        entity.setPassword(passwordEncoder.encode(userDTO.password()));
         Role role = new Role(2L, "OPERATOR");
         entity.getRoles().add(role);
         entity = userRepository.save(entity);
-        return new UserDTO(entity);
+        return UserDTO.fromEntity(entity);
     }
 
     @Transactional
-    public UserDTO update(Long id, UserDTO ubsDTO){
+    public UserDTO update(Long id, UserDTO userDTO){
         try{
             User entity = userRepository.getReferenceById(id);
-            copyDtoToEntity(ubsDTO, entity);
+            copyDtoToEntity(userDTO, entity);
             entity = userRepository.saveAndFlush(entity);
-            return new UserDTO(entity);
+            return UserDTO.fromEntity(entity);
 
         }catch(EntityNotFoundException e){
             throw new ResourceNotFoundException("Resource not found with id: " + id);
@@ -97,11 +96,38 @@ public class UserService {
         }
     }
 
-    private void copyDtoToEntity(UserDTO userDto, User entity) {
-        entity.setEmail(userDto.getEmail());
-        entity.setName(userDto.getName());
-        entity.setAddress(userDto.getAddress());
-        entity.setCpf(userDto.getCpf());
+    private void copyDtoToEntity(UserDTO dto, User entity) {
+        entity.setEmail(dto.email());
+        entity.setName(dto.name());
+        entity.setCpf(dto.cpf());
+        Address address = new Address();
+        if(dto.address().id() != null){
+            address = addressRepository.getReferenceById(dto.address().id());
+            entity.setAddress(address);
+        }else{
+            address.setStreet(dto.address().street());
+            address.setNumber(dto.address().number());
+            address.setDistrict(dto.address().district());
+            entity.setAddress(address);
+        }
 
     }
+
+    private void copyInsertDtoToEntity(UserInsertDTO dto, User entity) {
+        entity.setEmail(dto.email());
+        entity.setName(dto.name());
+        entity.setCpf(dto.cpf());
+
+        if(dto.address() != null){
+            Address address = new Address();
+            address.setDistrict(dto.address().district());
+            address.setNumber(dto.address().number());
+            address.setStreet(dto.address().street());
+
+            entity.setAddress(address);
+        }
+
+    }
+
+
 }
